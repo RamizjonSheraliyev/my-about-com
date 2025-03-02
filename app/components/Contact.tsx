@@ -11,20 +11,26 @@ import {
   Snackbar,
   Alert,
 } from "@mui/material";
-import { useDarkMode } from "./DarkModeContext"; // useDarkMode hook'ini import qilish
+import { useDarkMode } from "./DarkModeContext";
 
 const TELEGRAM_BOT_TOKEN = "7664954552:AAF7H7sjGICerimFr_xxrVGU8ly0Luj-SuQ";
 const TELEGRAM_CHAT_ID = "5250272118";
 
 export function ContactForm() {
-  const { darkMode, toggleDarkMode } = useDarkMode(); // useDarkMode hook'ini chaqirish
+  const { darkMode, toggleDarkMode } = useDarkMode();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     message: "",
   });
-  const [errors, setErrors] = useState({});
-  const [location, setLocation] = useState(null);
+  const [errors, setErrors] = useState<{
+    name?: string;
+    email?: string;
+    message?: string;
+  }>({});
+  const [location, setLocation] = useState<{ lat: number; lng: number } | null>(
+    null
+  );
   const [loading, setLoading] = useState(false);
   const [alertOpen, setAlertOpen] = useState(false);
 
@@ -49,7 +55,7 @@ export function ContactForm() {
   }, []);
 
   const validateForm = () => {
-    let newErrors = {};
+    const newErrors: { name?: string; email?: string; message?: string } = {};
     if (!formData.name) newErrors.name = "Ism kiritish kerak";
     if (!formData.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email))
       newErrors.email = "Yarim to'g'ri email";
@@ -58,11 +64,18 @@ export function ContactForm() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateForm()) return;
     setLoading(true);
-    const message = `📩 *Yangi aloqa formasi yuborildi*\n👤 *Ism:* ${formData.name}\n✉️ *Email:* ${formData.email}\n📝 *Xabar:* ${formData.message}\n📍 *Manzil:* ${location?.lat}, ${location?.lng}`;
+    const message = `📩 *Yangi aloqa formasi yuborildi*\n👤 *Ism:* ${
+      formData.name
+    }\n✉️ *Email:* ${formData.email}\n📝 *Xabar:* ${
+      formData.message
+    }\n📍 *Manzil:* ${
+      location ? `${location.lat}, ${location.lng}` : "Aniqlanmadi"
+    }`;
+
     try {
       await axios.post(
         `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
@@ -72,30 +85,29 @@ export function ContactForm() {
           parse_mode: "Markdown",
         }
       );
-      setAlertOpen(true); // Open the alert
+      setAlertOpen(true);
       setFormData({ name: "", email: "", message: "" });
     } catch (error) {
       console.error("Xato yuborishda:", error);
-      setAlertOpen(true); // Open the alert if error
+      setAlertOpen(true);
     }
     setLoading(false);
   };
 
   return (
     <div
-    id="contact"
+      id="contact"
       className={`transition-all duration-300 ${
         darkMode ? "bg-gray-800 text-white" : "bg-white text-black"
       }`}
     >
-      {/* Dark Mode switch */}
       <header className="flex justify-between p-4 items-center">
         <h1 className="text-3xl">Contact</h1>
         <FormControlLabel
           control={
             <Switch
               checked={darkMode}
-              onChange={toggleDarkMode} // Toggle dark mode when changed
+              onChange={toggleDarkMode}
               color="primary"
             />
           }
@@ -103,7 +115,6 @@ export function ContactForm() {
         />
       </header>
 
-      {/* Google Maps iframe */}
       {location && (
         <iframe
           className="w-full h-64 rounded-lg mb-4"
@@ -112,73 +123,107 @@ export function ContactForm() {
         ></iframe>
       )}
 
-      {/* Contact Form */}
       <section className="flex justify-center p-6">
         <form onSubmit={handleSubmit} className="space-y-8 w-full max-w-md">
-          <div className="space-y-6">
-            {" "}
-            {/* Increased space between inputs */}
-            <TextField
-              label="Ism"
-              variant="outlined"
-              size="small"
-              fullWidth
-              value={formData.name}
-              onChange={(e) =>
-                setFormData({ ...formData, name: e.target.value })
-              }
-              error={!!errors.name}
-              helperText={errors.name}
-              className={`rounded-md p-2 ${
-                darkMode ? "bg-gray-700 text-white" : "bg-white text-black"
-              }`}
-              style={{ height: "40px", marginBottom: "16px" }}
-            />
-            <TextField
-              label="Email manzili"
-              variant="outlined"
-              size="small"
-              fullWidth
-              value={formData.email}
-              onChange={(e) =>
-                setFormData({ ...formData, email: e.target.value })
-              }
-              error={!!errors.email}
-              helperText={errors.email}
-              className={`rounded-md p-2 ${
-                darkMode ? "bg-gray-700 text-white" : "bg-white text-black"
-              }`}
-              style={{ height: "40px", marginBottom: "16px" }}
-            />
-            <TextField
-              label="Xabar"
-              variant="outlined"
-              size="small"
-              fullWidth
-              multiline
-              rows={3}
-              value={formData.message}
-              onChange={(e) =>
-                setFormData({ ...formData, message: e.target.value })
-              }
-              error={!!errors.message}
-              helperText={errors.message}
-              className={`rounded-md p-2 ${
-                darkMode ? "bg-gray-700 text-white" : "bg-white text-black"
-              }`}
-              style={{ height: "80px", marginBottom: "16px" }}
-            />
-          </div>
+          <TextField
+            label="Ism"
+            variant="outlined"
+            size="small"
+            fullWidth
+            value={formData.name}
+            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+            error={!!errors.name}
+            helperText={errors.name}
+            style={{ height: "40px", marginBottom: "16px" }}
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": {
+                  borderColor: darkMode ? "white" : "black", // Dark mode → Oq, Light mode → Qora
+                },
+                "&:hover fieldset": {
+                  borderColor: darkMode ? "gray" : "gray", // Hover rangi
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: darkMode ? "#90caf9" : "#1976d2", // Fokus holatda
+                },
+                color: darkMode ? "white" : "black", // Matn rangi
+              },
+              "& .MuiInputLabel-root": {
+                color: darkMode ? "white" : "black", // Label (Ism, Email) rangi
+              },
+            }}
+          />
 
-          <div className="flex justify-center mt-6">
-            {" "}
-            {/* Increased margin-top */}
+          <TextField
+            label="Email manzili"
+            variant="outlined"
+            size="small"
+            fullWidth
+            value={formData.email}
+            onChange={(e) =>
+              setFormData({ ...formData, email: e.target.value })
+            }
+            error={!!errors.email}
+            helperText={errors.email}
+            style={{ height: "40px", marginBottom: "16px" }}
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": {
+                  borderColor: darkMode ? "white" : "black",
+                },
+                "&:hover fieldset": {
+                  borderColor: darkMode ? "gray" : "gray",
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: darkMode ? "#90caf9" : "#1976d2",
+                },
+                color: darkMode ? "white" : "black",
+              },
+              "& .MuiInputLabel-root": {
+                color: darkMode ? "white" : "black",
+              },
+            }}
+          />
+
+          <TextField
+            label="Xabar"
+            variant="outlined"
+            size="small"
+            fullWidth
+            multiline
+            rows={3}
+            value={formData.message}
+            onChange={(e) =>
+              setFormData({ ...formData, message: e.target.value })
+            }
+            error={!!errors.message}
+            helperText={errors.message}
+            style={{ height: "40px", marginBottom: "16px" }}
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": {
+                  borderColor: darkMode ? "white" : "black",
+                },
+                "&:hover fieldset": {
+                  borderColor: darkMode ? "gray" : "gray",
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: darkMode ? "#90caf9" : "#1976d2",
+                },
+                color: darkMode ? "white" : "black",
+              },
+              "& .MuiInputLabel-root": {
+                color: darkMode ? "white" : "black",
+              },
+            }}
+          />
+
+          <div className="flex justify-center mt-12 mb-10">
             <Button
               type="submit"
               variant="contained"
               color="primary"
               size="small"
-              className="bg-yellow-500 text-black py-2 px-6 rounded-full hover:bg-yellow-400"
               disabled={loading}
             >
               {loading ? (
@@ -191,7 +236,6 @@ export function ContactForm() {
         </form>
       </section>
 
-      {/* Snackbar Alert */}
       <Snackbar
         open={alertOpen}
         autoHideDuration={3000}
@@ -207,7 +251,6 @@ export function ContactForm() {
             : "Xabar muvaffaqiyatli yuborildi!"}
         </Alert>
       </Snackbar>
-      
     </div>
   );
 }

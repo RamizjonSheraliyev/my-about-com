@@ -1,112 +1,20 @@
  "use client";
 import React, { useState } from "react";
-import { Button, TextField, Alert, Slide, ThemeProvider, createTheme, Box, Typography } from "@mui/material";
-import { jsPDF } from "jspdf"; // jsPDF kutubxonasini import qilish
+import { Button, Alert, Snackbar, ThemeProvider, createTheme, Typography } from "@mui/material";
 
 // Mavzu (dark va light mode) yaratish
 const theme = createTheme({
   palette: {
-    mode: 'light', // default: light mode, keyin switch qilish mumkin
-    primary: {
-      main: '#1976d2',
-    },
-    secondary: {
-      main: '#f50057',
-    },
-    background: {
-      default: "#ffffff", // Light mode default background
-      paper: "#f5f5f5",    // Paper style for light mode
-    },
-    text: {
-      primary: "#000000",  // Text color for light mode (black)
-    }
+    mode: 'light',
+    primary: { main: '#1976d2' },
+    secondary: { main: '#f50057' },
+    background: { default: "#ffffff", paper: "#f5f5f5" },
+    text: { primary: "#000000" }
   },
 });
 
 export default function ResumeCreate() {
-  const [formData, setFormData] = useState({
-    name: "",
-    jobTitle: "",
-    skills: "",
-    experience: "",
-    education: "",
-    contact: "",
-  });
-
-  const [errors, setErrors] = useState({
-    name: "",
-    jobTitle: "",
-    skills: "",
-    contact: "",
-  });
-
-  const [loading, setLoading] = useState(false);
-  const [alertMessage, setAlertMessage] = useState("");
-  const [showForm, setShowForm] = useState(false);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
-
-  const validateForm = () => {
-    const newErrors = {};
-
-    // Ism tekshiruvi
-    if (formData.name.trim().length < 3) {
-      newErrors.name = "Ism kamida 3 ta harf bo‘lishi kerak.";
-    }
-
-    // Ko'nikmalar tekshiruvi
-    if (formData.skills.trim().length < 50) {
-      newErrors.skills = "Ko'nikmalar bo'limi kamida 50 ta belgidan iborat bo'lishi kerak.";
-    }
-
-    // Kontakt (email yoki telefon) tekshiruvi
-    if (formData.contact.trim().length < 10) {
-      newErrors.contact = "Aloqa (email yoki telefon) to‘liq bo‘lishi kerak.";
-    } else {
-      // Kontaktni email yoki telefon raqami deb tekshirish (oddiy regex bilan)
-      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-      const phoneRegex = /^[0-9]{10,15}$/;
-      
-      if (!(emailRegex.test(formData.contact) || phoneRegex.test(formData.contact))) {
-        newErrors.contact = "Aloqa (email yoki telefon) noto‘g‘ri formatda.";
-      }
-    }
-
-    // Xatoliklarni to'ldirish
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!validateForm()) {
-      return;
-    }
-    setLoading(true);
-
-    // PDF yaratish
-    const doc = new jsPDF();
-    doc.setFont("helvetica", "normal");
-
-    // PDF uchun bosh dizayn
-    doc.setFontSize(18);
-    doc.text("Rezyume", 20, 20);
-    doc.setFontSize(14);
-    doc.text(`Ism: ${formData.name}`, 20, 40);
-    doc.text(`Lavozim: ${formData.jobTitle}`, 20, 50);
-    doc.text(`Ko'nikmalar: ${formData.skills}`, 20, 60);
-    doc.text(`Tajribalar: ${formData.experience || "N/A"}`, 20, 70);
-    doc.text(`Ta'lim: ${formData.education || "N/A"}`, 20, 80);
-    doc.text(`Aloqa: ${formData.contact}`, 20, 90);
-
-    // Rezyumeni PDF sifatida yuklab olish
-    doc.save("rezyume.pdf");
-
-    setLoading(false);
-  };
+  const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
 
   return (
     <ThemeProvider theme={theme}>
@@ -115,124 +23,25 @@ export default function ResumeCreate() {
           Rezyume Yaratish
         </Typography>
 
-        {/* Rezyume yaratish tugmasi */}
-        {!showForm && (
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => setShowForm(true)}
-            className="w-40"
-          >
-            Rezyume Yaratish
-          </Button>
-        )}
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => setOpenSnackbar(true)}
+          className="w-40"
+        >
+          Rezyume Yaratish
+        </Button>
 
-        {/* Formani ko'rsatish */}
-        {showForm && (
-          <Slide direction="up" in={showForm} mountOnEnter unmountOnExit>
-            <Box
-              sx={{
-                width: '100%',
-                maxWidth: 600,
-                backgroundColor: 'background.paper',
-                padding: 3,
-                borderRadius: 2,
-                boxShadow: 3,
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 2,
-              }}
-            >
-              <TextField
-                label="Ism"
-                variant="outlined"
-                fullWidth
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                required
-                size="small"
-                error={!!errors.name}
-                helperText={errors.name}
-              />
-              <TextField
-                label="Lavozim"
-                variant="outlined"
-                fullWidth
-                name="jobTitle"
-                value={formData.jobTitle}
-                onChange={handleChange}
-                size="small"
-              />
-              <TextField
-                label="Ko'nikmalar"
-                variant="outlined"
-                fullWidth
-                name="skills"
-                value={formData.skills}
-                onChange={handleChange}
-                multiline
-                rows={4}
-                required
-                size="small"
-                error={!!errors.skills}
-                helperText={errors.skills}
-              />
-              <TextField
-                label="Tajribalar"
-                variant="outlined"
-                fullWidth
-                name="experience"
-                value={formData.experience}
-                onChange={handleChange}
-                multiline
-                rows={4}
-                size="small"
-              />
-              <TextField
-                label="Ta'lim"
-                variant="outlined"
-                fullWidth
-                name="education"
-                value={formData.education}
-                onChange={handleChange}
-                multiline
-                rows={4}
-                size="small"
-              />
-              <TextField
-                label="Aloqa (Email yoki Telefon)"
-                variant="outlined"
-                fullWidth
-                name="contact"
-                value={formData.contact}
-                onChange={handleChange}
-                required
-                size="small"
-                error={!!errors.contact}
-                helperText={errors.contact}
-              />
-
-              <Button
-                variant="contained"
-                color="primary"
-                fullWidth
-                onClick={handleSubmit}
-                disabled={loading}
-                size="small"
-              >
-                {loading ? "Rezyume Yaratilyapti..." : "Rezyume Yaratish"}
-              </Button>
-
-              {/* Xato xabari */}
-              {alertMessage && (
-                <Alert severity="error" onClose={() => setAlertMessage("")}>
-                  {alertMessage}
-                </Alert>
-              )}
-            </Box>
-          </Slide>
-        )}
+        <Snackbar
+          open={openSnackbar}
+          autoHideDuration={3000}
+          onClose={() => setOpenSnackbar(false)}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        >
+          <Alert severity="info" sx={{ width: '100%' }}>
+            Tez orada qo‘shiladi...
+          </Alert>
+        </Snackbar>
       </section>
     </ThemeProvider>
   );
