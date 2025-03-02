@@ -4,8 +4,10 @@ import { useDarkMode } from "./DarkModeContext";
 
 export function Blog() {
   const { darkMode } = useDarkMode();
-  const [expandedPost, setExpandedPost] = useState(null);
-  const [loadingPost, setLoadingPost] = useState(null);
+  
+  // State'larni aniq number yoki null qilib belgilash
+  const [expandedPost, setExpandedPost] = useState<number | null>(null);
+  const [loadingPost, setLoadingPost] = useState<number | null>(null);
 
   const blogPosts = [
     {
@@ -70,14 +72,15 @@ export function Blog() {
     }
   ];
 
-  const handleReadMore = (id) => {
+  // `id` ni number deb e’lon qilish
+  const handleReadMore = (id: number) => {
     setLoadingPost(id);
     setTimeout(() => {
       setExpandedPost(id);
       setLoadingPost(null);
     }, 1000);
   };
-
+  
   return (
     <section id="blog" className={`py-12 px-6 space-y-8 ${darkMode ? "bg-gray-800 text-white" : "bg-white text-black"}`}>
       <h2 className="text-3xl font-bold border-b-4 border-yellow-500 inline-block pb-2">
