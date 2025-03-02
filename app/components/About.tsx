@@ -183,17 +183,17 @@ export default function AboutMe() {
             🛠 Skills & Technologies
           </h4>
           <div className="flex flex-wrap gap-2">
-            <SkillBadge text="HTML5" />
-            <SkillBadge text="CSS3" />
-            <SkillBadge text="Tailwind CSS" />
-            <SkillBadge text="JavaScript" />
-            <SkillBadge text="TypeScript" />
-            <SkillBadge text="React.js" />
-            <SkillBadge text="Next.js" />
-            <SkillBadge text="Node.js (Learning...)" />
-            <SkillBadge text="Git & GitHub" />
-            <SkillBadge text="ShadCN UI" />
-            <SkillBadge text="Material UI" />
+            <SkillBadge name="HTML5" />
+            <SkillBadge name="CSS3" />
+            <SkillBadge name="Tailwind CSS" />
+            <SkillBadge name="JavaScript" />
+            <SkillBadge name="TypeScript" />
+            <SkillBadge name="React.js" />
+            <SkillBadge name="Next.js" />
+            <SkillBadge name="Node.js (Learning...)" />
+            <SkillBadge name="Git & GitHub" />
+            <SkillBadge name="ShadCN UI" />
+            <SkillBadge name="Material UI" />
           </div>
         </div>
 
@@ -260,7 +260,11 @@ export default function AboutMe() {
   );
 }
 
-function SkillBadge({ text }) {
+interface SkillBadgeProps {
+  name: string;
+}
+
+const SkillBadge: React.FC<SkillBadgeProps> = ({ name }) => {
   const { darkMode } = useDarkMode();
   return (
     <span
@@ -271,7 +275,8 @@ function SkillBadge({ text }) {
             : "bg-gray-300 text-black hover:bg-gray-400"
         }`}
     >
-      {text}
+      {name}
     </span>
   );
-}
+};
+
