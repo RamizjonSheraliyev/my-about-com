@@ -2,4 +2,10 @@
 
  
   
- 
+ /* globals.css */
+
+/* To block scroll */
+body {
+    overflow-x: hidden;
+  }
+  

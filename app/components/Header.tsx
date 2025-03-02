@@ -1,4 +1,4 @@
-"use client";
+ "use client";
 import React, { useState, useEffect } from "react";
 import { Sun, Moon, User, FileText, Briefcase, PenTool, Mail, Menu, X } from "lucide-react";
 import { useDarkMode } from "./DarkModeContext";
@@ -10,7 +10,11 @@ export function Header() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolling(window.scrollY > 50);
+      if (window.scrollY > 50) {
+        setScrolling(true);
+      } else {
+        setScrolling(false);
+      }
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -26,7 +30,11 @@ export function Header() {
   };
 
   return (
-    <header className={`w-full z-10 transition-all duration-300 ${darkMode ? "bg-gray-900 text-white" : "bg-white text-black"}`}>
+    <header
+      className={`w-full z-10 transition-all duration-300 ${darkMode ? "bg-gray-900 text-white" : "bg-white text-black"} 
+        ${scrolling ? "shadow-lg backdrop-blur-md" : ""} 
+        sticky top-0`}
+    >
       <div className="py-4 px-6 flex justify-between items-center">
         <h1 className="text-2xl font-bold">RamizDev</h1>
 

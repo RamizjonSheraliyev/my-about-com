@@ -51,9 +51,31 @@ export default function ResumeCreate() {
 
   const validateForm = () => {
     const newErrors = {};
-    if (formData.name.length < 3) newErrors.name = "Ism kamida 3 ta harf bo‘lishi kerak.";
-    if (formData.skills.length < 50) newErrors.skills = "Ko'nikmalar bo'limi kamida 50 ta belgidan iborat bo'lishi kerak.";
-    if (formData.contact.length < 10) newErrors.contact = "Aloqa (email yoki telefon) to‘liq bo‘lishi kerak.";
+
+    // Ism tekshiruvi
+    if (formData.name.trim().length < 3) {
+      newErrors.name = "Ism kamida 3 ta harf bo‘lishi kerak.";
+    }
+
+    // Ko'nikmalar tekshiruvi
+    if (formData.skills.trim().length < 50) {
+      newErrors.skills = "Ko'nikmalar bo'limi kamida 50 ta belgidan iborat bo'lishi kerak.";
+    }
+
+    // Kontakt (email yoki telefon) tekshiruvi
+    if (formData.contact.trim().length < 10) {
+      newErrors.contact = "Aloqa (email yoki telefon) to‘liq bo‘lishi kerak.";
+    } else {
+      // Kontaktni email yoki telefon raqami deb tekshirish (oddiy regex bilan)
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      const phoneRegex = /^[0-9]{10,15}$/;
+      
+      if (!(emailRegex.test(formData.contact) || phoneRegex.test(formData.contact))) {
+        newErrors.contact = "Aloqa (email yoki telefon) noto‘g‘ri formatda.";
+      }
+    }
+
+    // Xatoliklarni to'ldirish
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
