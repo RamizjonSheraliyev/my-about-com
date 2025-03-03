@@ -1,15 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { ClerkProvider } from "@clerk/nextjs";
 
-// import { Header } from "./components/Header";
-// import { DarkModeProvider } from "./components/DarkModeContext";
-// import AboutMe from "./components/About";
-// import { Resume } from "./components/Resume";
-// import { Portfolio } from "./components/Portfolio";
-// import { Blog } from "./components/Blog";
-// import { ContactForm } from "./components/Contact";
-// import { SocialLinks } from "./components/Form";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,16 +29,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {/* <DarkModeProvider>
-          <Header />
-          <AboutMe />
-          <Resume />
-          <Portfolio />
-          <Blog />
-          <ContactForm />
-          <SocialLinks /> */}
-          <main className="pt-16">{children}</main>
-        {/* </DarkModeProvider> */}
+           <ClerkProvider>
+            {children} 
+          </ClerkProvider>
       </body>
     </html>
   );

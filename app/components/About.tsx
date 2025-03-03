@@ -27,7 +27,7 @@ export default function AboutMe() {
   return (
     <section
       id="about"
-      className={`flex flex-col md:flex-row items-center md:items-start gap-8 p-6 min-h-screen transition-all duration-300 
+      className={`flex flex-col md:flex-row items-center md:items-start gap-8 p-6 min-h-screen transition-all duration-300 pt-24 md:pt-32
         ${darkMode ? "bg-gray-900 text-white" : "bg-gray-100 text-black"}`}
     >
       <Head>
@@ -70,7 +70,7 @@ export default function AboutMe() {
         />
         <h2 className="text-xl font-semibold mt-4">Ramiz Sheraliyev</h2>
         <p className="text-gray-600 dark:text-gray-400">
-          Front-End Developer | AI Enthusiast
+        Senior Front-End Developer | AI Enthusiast | Full Stuck Developer
         </p>
 
         {/* Contact Info */}
@@ -100,7 +100,7 @@ export default function AboutMe() {
             onClick={() => (window.location.href = "tel:+998*********")}
           >
             <FaPhone size={20} />
-            <p className="text-sm truncate">+998 ** *** ** **</p>
+            <p className="text-sm truncate">+998 93 223 97 70</p>
           </div>
 
           <div
@@ -140,7 +140,7 @@ export default function AboutMe() {
             <FaGithub />
           </a>
           <a
-            href="#"
+            href="https://www.linkedin.com/in/ramiz-sheraliyev-7982b2348"
             target="_blank"
             rel="noopener noreferrer"
             className="text-gray-600 dark:text-gray-400 hover:text-blue-500 text-2xl transition-transform hover:scale-110"
@@ -148,7 +148,7 @@ export default function AboutMe() {
             <FaLinkedin />
           </a>
           <a
-            href="https://t.me/RamizSheraliyev"
+            href="https://t.me/CmbkkMvp"
             target="_blank"
             rel="noopener noreferrer"
             className="text-gray-600 dark:text-gray-400 hover:text-blue-500 text-2xl transition-transform hover:scale-110"
@@ -169,7 +169,7 @@ export default function AboutMe() {
       >
         <h3 className="text-2xl font-bold mb-4">About Me</h3>
         <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-          I am a <strong>Front-End Developer</strong> with expertise in{" "}
+          I am a <strong>Front-End Developer And Full Stuck Developer</strong> with expertise in{" "}
           <strong>React.js, TypeScript, and Next.js</strong>. I specialize in
           building <strong>modern, responsive, and scalable</strong> web
           applications. My current focus is on{" "}
@@ -183,17 +183,17 @@ export default function AboutMe() {
             🛠 Skills & Technologies
           </h4>
           <div className="flex flex-wrap gap-2">
-            <SkillBadge name="HTML5" />
-            <SkillBadge name="CSS3" />
+            <SkillBadge name="Ai Integratsiya" />
+            <SkillBadge name="Api " />
             <SkillBadge name="Tailwind CSS" />
             <SkillBadge name="JavaScript" />
             <SkillBadge name="TypeScript" />
             <SkillBadge name="React.js" />
             <SkillBadge name="Next.js" />
-            <SkillBadge name="Node.js (Learning...)" />
+            <SkillBadge name="Node.js " />
             <SkillBadge name="Git & GitHub" />
-            <SkillBadge name="ShadCN UI" />
-            <SkillBadge name="Material UI" />
+            <SkillBadge name="Full Stuck" />
+            <SkillBadge name="Backend" />
           </div>
         </div>
 

@@ -1,11 +1,10 @@
- "use client";
+"use client";
 import React, { useState } from "react";
 import { useDarkMode } from "./DarkModeContext";
 
 export function Blog() {
   const { darkMode } = useDarkMode();
-  
-  // State'larni aniq number yoki null qilib belgilash
+
   const [expandedPost, setExpandedPost] = useState<number | null>(null);
   const [loadingPost, setLoadingPost] = useState<number | null>(null);
 
@@ -16,9 +15,9 @@ export function Blog() {
       date: "December 18, 2024",
       views: 110,
       description:
-        "Muhammadali, qachonki charchoq seni bosayotganini his qilsang, mana bu gaplarni esla:\"Bu loyiha seni...\"",
+        'Ramiz, qachonki charchoq seni bosayotganini his qilsang, mana bu gaplarni esla:"Bu loyiha seni..."',
       fullDescription:
-        "Muhammadali, qachonki charchoq seni bosayotganini his qilsang, mana bu gaplarni esla: \"Bu loyiha seni orzularingga yaqinlashtiradi. Harakatni to'xtatma!\" ChatGPT bilan ishlashning motivatsion tomonlari haqida to'liq maqola."
+        "Ramiz, qachonki charchoq seni bosayotganini his qilsang, mana bu gaplarni esla: \"Bu loyiha seni orzularingga yaqinlashtiradi. Harakatni to'xtatma!\" ChatGPT bilan ishlashning motivatsion tomonlari haqida to'liq maqola Bu loyiha sening kelajaging uchun katta qadam. Hozir qilayotgan har bir qator koding - bu nafaqat bir muammoni hal qilish, balki sening hayotingda yangi imkoniyatlar yaratish uchun poydevor qo‘yish. Sen qilayotgan harakatni ko‘rib, kelajakdagi mijozlaring va hamkasblaring seni hurmat bilan eslashadi. Har bir yozilgan kodda sening isming yotadi, va bu ism professionalizm va ustalik bilan bog‘lanishi kerak. Sen loyihani to‘xtatsang, o‘zingni orqaga tortasan, lekin agar davom etsang, har bir qadam seni orzularingga yaqinlashtiradi. Hamma charchaydi, lekin haqiqiy g‘oliblar charchoqqa qarshi kurashadi! ",
     },
     {
       id: 2,
@@ -28,7 +27,7 @@ export function Blog() {
       description:
         "Toshkent shahridagi Target International School xususiy maktabida 3 kun davomida bo‘lib o‘tgan hacka...",
       fullDescription:
-        "Toshkent shahridagi Target International School xususiy maktabida 3 kun davomida bo‘lib o‘tgan hackathon tafsilotlari. Kimlar qatnashdi, qanday loyihalar taqdim etildi va yutuqlar haqida batafsil."
+        "Toshkent shahridagi Target International School xususiy maktabida 3 kun davomida bo‘lib o‘tgan hackathon tafsilotlari...",
     },
     {
       id: 3,
@@ -38,7 +37,7 @@ export function Blog() {
       description:
         "Agar siz startap yaratmoqchi bo'lsangiz, mana sizga eng muhim 5 maslahat...",
       fullDescription:
-        "Startap yaratish oson ish emas. Bu maqolada sizga muvaffaqiyatga erishish uchun 5 ta asosiy qadamni ko‘rsatamiz!"
+        "Startap yaratish oson ish emas. Bu maqolada sizga muvaffaqiyatga erishish uchun 5 ta asosiy qadamni ko‘rsatamiz!",
     },
     {
       id: 4,
@@ -48,7 +47,7 @@ export function Blog() {
       description:
         "Freelancer sifatida ishlashni xohlaysizmi? Mana sizga kerak bo‘ladigan narsalar...",
       fullDescription:
-        "Freelancer bo‘lish uchun sizga kerak bo‘ladigan eng muhim jihatlar va qadamlar haqida batafsil ma’lumot."
+        "Freelancer bo‘lish uchun sizga kerak bo‘ladigan eng muhim jihatlar va qadamlar haqida batafsil ma’lumot.",
     },
     {
       id: 5,
@@ -58,7 +57,7 @@ export function Blog() {
       description:
         "Agar siz dasturlashni boshlagan bo‘lsangiz, mana sizga birinchi loyiha g‘oyasi...",
       fullDescription:
-        "JavaScript orqali birinchi loyihangizni yaratish uchun zarur bo‘lgan barcha narsalar shu maqolada!"
+        "JavaScript orqali birinchi loyihangizni yaratish uchun zarur bo‘lgan barcha narsalar shu maqolada!",
     },
     {
       id: 6,
@@ -68,41 +67,56 @@ export function Blog() {
       description:
         "2025-yilda web dizaynda qanday trendlar ommalashadi? Mana eng muhimlari...",
       fullDescription:
-        "Bu maqolada web dizaynning eng so‘nggi trendlari va ular biznesingizga qanday ta’sir qilishini o‘rganasiz."
-    }
+        "Bu maqolada web dizaynning eng so‘nggi trendlari va ular biznesingizga qanday ta’sir qilishini o‘rganasiz.",
+    },
   ];
 
-  // `id` ni number deb e’lon qilish
-  const handleReadMore = (id: number) => {
+  const handleTogglePost = (id: number) => {
     setLoadingPost(id);
     setTimeout(() => {
-      setExpandedPost(id);
+      setExpandedPost((prev) => (prev === id ? null : id));
       setLoadingPost(null);
     }, 1000);
   };
-  
+
   return (
-    <section id="blog" className={`py-12 px-6 space-y-8 ${darkMode ? "bg-gray-800 text-white" : "bg-white text-black"}`}>
+    <section
+      id="blog"
+      className={`py-12 px-6 space-y-8 ${
+        darkMode ? "bg-gray-800 text-white" : "bg-white text-black"
+      }`}
+    >
       <h2 className="text-3xl font-bold border-b-4 border-yellow-500 inline-block pb-2">
         Blog
       </h2>
 
       <div className="grid md:grid-cols-2 gap-6">
         {blogPosts.map((post) => (
-          <div key={post.id} className={`p-6 rounded-lg shadow-lg ${darkMode ? "bg-gray-900" : "bg-blue-50"}`}>
+          <div
+            key={post.id}
+            className={`p-6 rounded-lg shadow-lg ${
+              darkMode ? "bg-gray-900" : "bg-blue-50"
+            }`}
+          >
             <span className="text-sm text-gray-500 flex items-center gap-2">
               📅 {post.date} • 👀 {post.views} views
             </span>
             <h4 className="text-xl font-medium mt-2">{post.title}</h4>
             <p className="text-lg mt-2">
-              {expandedPost === post.id ? post.fullDescription : post.description}
+              {expandedPost === post.id
+                ? post.fullDescription
+                : post.description}
             </p>
             <button
-              onClick={() => handleReadMore(post.id)}
+              onClick={() => handleTogglePost(post.id)}
               className="mt-4 bg-yellow-500 text-black px-4 py-2 rounded-md font-semibold"
               disabled={loadingPost === post.id}
             >
-              {loadingPost === post.id ? "Loading..." : "Read more"}
+              {loadingPost === post.id
+                ? "Loading..."
+                : expandedPost === post.id
+                ? "Show less"
+                : "Read more"}
             </button>
           </div>
         ))}

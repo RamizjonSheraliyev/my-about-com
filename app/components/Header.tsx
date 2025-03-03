@@ -10,12 +10,15 @@ import {
   Mail,
   Menu,
   X,
+  UserCircle,
 } from "lucide-react";
 import { useDarkMode } from "./DarkModeContext";
 import Link from "next/link";
+import { UserButton, useUser, SignInButton } from "@clerk/nextjs";
 
 export function Header() {
   const { darkMode, toggleDarkMode } = useDarkMode();
+  const { isSignedIn } = useUser();
   const [scrolling, setScrolling] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -30,13 +33,15 @@ export function Header() {
 
   return (
     <header
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 
+      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300  
         ${darkMode ? "bg-gray-900 text-white" : "bg-white text-black"} 
         ${scrolling ? "shadow-md" : ""}
       `}
     >
       <div className="py-4 px-6 flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Ramiz</h1>
+        <Link href="/" className="text-2xl font-bold cursor-pointer">
+          Ramiz
+        </Link>
 
         {/* Desktop Navbar */}
         <nav className="hidden md:flex space-x-6 items-center">
@@ -61,8 +66,9 @@ export function Header() {
           ))}
         </nav>
 
-        {/* Dark Mode & Mobile Menu Button */}
+        {/* Dark Mode & User Icon & Mobile Menu Button */}
         <div className="flex items-center gap-4">
+          {/* Dark Mode Toggle */}
           <button
             onClick={toggleDarkMode}
             className="p-2 rounded-full transition-all duration-300"
@@ -74,13 +80,27 @@ export function Header() {
             )}
           </button>
 
+          {/* User Button */}
+          {isSignedIn ? (
+            <UserButton afterSignOutUrl="/" />
+          ) : (
+            <SignInButton mode="modal">
+              <button className="p-2 rounded-full transition-al cursor-pointer">
+                <UserCircle
+                  size={28}
+                  className="text-gray-600 dark:text-gray-500"
+                />
+              </button>
+            </SignInButton>
+          )}
+
+          {/* Mobile Menu Button */}
           <button onClick={() => setMenuOpen(true)} className="md:hidden">
             <Menu size={30} />
           </button>
         </div>
       </div>
 
-      {/* Mobile Menu */}
       {/* Mobile Menu */}
       <div
         className={`fixed inset-y-0 right-0 w-64 bg-pink-600 text-white transition-transform duration-300 
@@ -106,7 +126,7 @@ export function Header() {
                   if (section) {
                     section.scrollIntoView({ behavior: "smooth" });
                   }
-                  setMenuOpen(false); // Menyuni yopish
+                  setMenuOpen(false);
                 }}
               >
                 {href.replace("#", "").charAt(0).toUpperCase() + href.slice(2)}
