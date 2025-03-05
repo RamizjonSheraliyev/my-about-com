@@ -18,7 +18,7 @@ const MyCourses = () => {
   // Fetch user courses using useEffect
   useEffect(() => {
     // Simulate a backend request with a timeout
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       const fetchedCourses: Course[] = [
         {
           id: 1,
@@ -36,10 +36,15 @@ const MyCourses = () => {
       setLoading(false); // Stop loading
     }, 5000); // Simulate delay of 5 seconds
 
-    // Redirect to /courses page after 5 seconds
-    setTimeout(() => {
+    // Redirect to /courses page after courses are fetched
+    const redirectTimer = setTimeout(() => {
       router.push("/courses");
     }, 5000); // Redirect after 5 seconds
+
+    return () => {
+      clearTimeout(timer);
+      clearTimeout(redirectTimer);
+    };
   }, [router]); // Added router as a dependency
 
   if (loading) {
