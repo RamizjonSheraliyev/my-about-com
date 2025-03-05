@@ -1,6 +1,7 @@
  "use client";
 import React, { useState } from "react";
 import { useDarkMode } from "./DarkModeContext";
+import { useRouter } from "next/navigation"; // Next.js router
 
 const projects = [
   { id: 1, title: "Marmarishotel.Uz", category: "real", link: "#" },
@@ -14,6 +15,7 @@ const projects = [
 export function Portfolio() {
   const { darkMode } = useDarkMode();
   const [activeCategory, setActiveCategory] = useState("all");
+  const router = useRouter();
 
   const filteredProjects =
     activeCategory === "all"
@@ -74,6 +76,16 @@ export function Portfolio() {
             </p>
           </a>
         ))}
+      </div>
+
+      {/* Kurs sotib olish tugmasi */}
+      <div className="flex justify-center mt-8">
+        <button
+          onClick={() => router.push("/courses")}
+          className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition cursor-pointer"
+        >
+          Kurs sotib olish
+        </button>
       </div>
     </section>
   );
