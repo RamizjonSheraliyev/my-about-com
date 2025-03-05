@@ -40,7 +40,7 @@ const MyCourses = () => {
     setTimeout(() => {
       router.push("/courses");
     }, 5000); // Redirect after 5 seconds
-  }, []);
+  }, [router]); // Added router as a dependency
 
   if (loading) {
     // Show loading state

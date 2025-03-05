@@ -1,5 +1,5 @@
  "use client";
-import { useSearchParams, useRouter } from "next/navigation";
+ import { useSearchParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { Snackbar, Alert } from "@mui/material";
 
@@ -121,7 +121,7 @@ export default function Checkout() {
       {/* Material UI Snackbar */}
       <Snackbar open={success} autoHideDuration={4000} onClose={() => setSuccess(false)}>
         <Alert onClose={() => setSuccess(false)} severity="success" sx={{ width: "100%" }}>
-          Tabriklaymiz! Siz " {title} " kursini sotib oldingiz!
+          Tabriklaymiz! Siz  {title}  kursini sotib oldingiz!
         </Alert>
       </Snackbar>
 
