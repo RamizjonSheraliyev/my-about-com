@@ -2,25 +2,37 @@
 import React, { useState } from "react";
 import { useDarkMode } from "./DarkModeContext";
 import { useRouter } from "next/navigation"; // Next.js router
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 
 const projects = [
-  { id: 1, title: "Marmarishotel.Uz", category: "real", link: "#" },
-  { id: 2, title: "LogoSmart Hamkor", category: "real", link: "#" },
-  { id: 3, title: "Kinodasiz", category: "real", link: "#" },
-  { id: 4, title: "Dilkash Delivery", category: "real", link: "#" },
-  { id: 5, title: "Zaynab Market HR Bot", category: "real", link: "#" },
-  { id: 6, title: "Namoz Tutor", category: "personal", link: "#" },
+  { id: 1, title: "Marmarishotel.Uz", category: "real", link: "/marmarishotel" },
+  { id: 2, title: "LogoSmart Hamkor", category: "real", link: "/logosmart" },
+  { id: 3, title: "Kinodasiz", category: "real", link: "/kinodasiz" },
+  { id: 4, title: "Dilkash Delivery", category: "real", link: "/dilkash" },
+  { id: 5, title: "Zaynab Market HR Bot", category: "real", link: "/zaynab" },
+  { id: 6, title: "Namoz Tutor", category: "personal", link: "/namoz-tutor" },
 ];
 
 export function Portfolio() {
   const { darkMode } = useDarkMode();
   const [activeCategory, setActiveCategory] = useState("all");
-  const router = useRouter();
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const router = useRouter(); // Routerni ishlatamiz
 
   const filteredProjects =
     activeCategory === "all"
       ? projects
       : projects.filter((project) => project.category === activeCategory);
+
+  const handlePurchaseClick = () => {
+    setOpenSnackbar(true);
+  };
+
+  // **Router orqali sahifaga yo‘naltirish**
+  const handleProjectClick = (link: string) => {
+    router.push(link);
+  };
 
   return (
     <section
@@ -57,11 +69,9 @@ export function Portfolio() {
       {/* Projects Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
         {filteredProjects.map((project) => (
-          <a
+          <button
             key={project.id}
-            href={project.link}
-            target="_blank"
-            rel="noopener noreferrer"
+            onClick={() => handleProjectClick(project.link)}
             className={`p-4 rounded-lg shadow-lg transition ${
               darkMode
                 ? "bg-gray-700 text-white hover:bg-gray-600"
@@ -74,19 +84,36 @@ export function Portfolio() {
                 ? "Real projects"
                 : "Personal projects"}
             </p>
-          </a>
+          </button>
         ))}
       </div>
 
       {/* Kurs sotib olish tugmasi */}
       <div className="flex justify-center mt-8">
         <button
-          onClick={() => router.push("/courses")}
+          onClick={handlePurchaseClick}
           className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition cursor-pointer"
         >
           Kurs sotib olish
         </button>
       </div>
+
+      {/* Snackbar (Bildirishnoma) */}
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={4000}
+        onClose={() => setOpenSnackbar(false)}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <MuiAlert
+          elevation={6}
+          variant="filled"
+          severity="info"
+          onClose={() => setOpenSnackbar(false)}
+        >
+          Tez orada qo‘shiladi, sabr qiling! 🚀
+        </MuiAlert>
+      </Snackbar>
     </section>
   );
 }
