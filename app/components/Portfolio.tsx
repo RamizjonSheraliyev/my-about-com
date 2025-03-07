@@ -25,13 +25,14 @@ export function Portfolio() {
       ? projects
       : projects.filter((project) => project.category === activeCategory);
 
-  const handlePurchaseClick = () => {
-    setOpenSnackbar(true);
-  };
-
   // **Router orqali sahifaga yo‘naltirish**
   const handleProjectClick = (link: string) => {
     router.push(link);
+  };
+
+  // **Kurs sotib olish tugmasi bosilganda sahifaga o'tish**
+  const handlePurchaseClick = () => {
+    router.push("/purchase"); // Kurs sotib olish sahifasiga o'tish
   };
 
   return (
